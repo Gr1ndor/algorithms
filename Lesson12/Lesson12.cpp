@@ -6,7 +6,8 @@ struct Node {
 	Node* right;
 };
 
-Node* insTree(Node* tree, int data) {
+Node* insTree(Node* tree, int data) 
+{
 	if (tree == NULL)
 	{
 		tree = new Node;
@@ -53,14 +54,22 @@ int height(Node* tree)
 
 bool checkTreeBalance(Node* tree)
 {
-	if (tree->right != NULL && tree->left != NULL) 
+	if (tree != NULL) 
 	{ 
-		checkTreeBalance(tree->left); 
-		checkTreeBalance(tree->right);
-		if (abs(height(tree->left) - height(tree->right)) > 1)
-			return 0;
-		return 1;
+		if (abs(height(tree->left) - height(tree->right)) <= 1 && checkTreeBalance(tree->left) && checkTreeBalance(tree->right))
+			return 1;
+		return 0;	
 	}
+}
+
+bool searchInTree(Node* tree, int data)
+{
+	if (tree != NULL)
+	{
+		if (tree->val == data || searchInTree(tree->left, data) || searchInTree(tree->right, data))
+			return 1;
+	}
+	return 0;
 }
 
 void delTree(Node* tree) {
@@ -94,23 +103,30 @@ int main()
 	{
 		std::cout << "Not balanced" << std::endl;
 	}
-	delTree(tree);
-	//task 2
+	//task 1.2
 	srand(10000);
 	double count = 0;
 	for (size_t i = 0; i < 50; i++)
 	{
 		Node* tree2 = NULL;
 		tree2 = insTree(tree2, rand());
-		std::cout << tree2->val << ' ';
 		for (size_t j = 1; j < 10000; j++)
 		{
-			int x = rand();
-			insTree(tree2, x);
+			insTree(tree2, rand());
 		}
 		if (checkTreeBalance(tree2))
 			count++;
 		delTree(tree2);
 	}
-	std::cout << count/1000 << "% balanced" << std::endl;
+	std::cout << count << "% balanced" << std::endl;
+	//task2
+	int a = 23;
+	if (searchInTree(tree, a))
+	{
+		std::cout << a << " found in a tree" << std::endl;
+	}
+	else
+	{
+		std::cout << a << " not found in a tree" << std::endl;
+	}
 }
